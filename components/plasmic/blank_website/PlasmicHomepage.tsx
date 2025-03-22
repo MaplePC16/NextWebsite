@@ -59,6 +59,8 @@ import {
   useGlobalActions
 } from "@plasmicapp/react-web/lib/host";
 
+import { Fetcher } from "@plasmicapp/react-web/lib/data-sources";
+
 import "@plasmicapp/react-web/lib/plasmic.css";
 
 import projectcss from "./plasmic.module.css"; // plasmic-import: dBMHumUb6gtoSbF9zUMX5E/projectcss
@@ -80,6 +82,7 @@ export type PlasmicHomepage__OverridesType = {
   section?: Flex__<"section">;
   h1?: Flex__<"h1">;
   text?: Flex__<"div">;
+  dataFetcher?: Flex__<typeof Fetcher>;
 };
 
 export interface DefaultHomepageProps {}
@@ -162,7 +165,7 @@ function PlasmicHomepage__RenderFunc(props: {
                 sty.h1
               )}
             >
-              {"Hello World!"}
+              {"Hello World! asdasda"}
             </h1>
             <div
               data-plasmic-name={"text"}
@@ -193,6 +196,19 @@ function PlasmicHomepage__RenderFunc(props: {
               </React.Fragment>
             </div>
           </section>
+          <Fetcher
+            data-plasmic-name={"dataFetcher"}
+            data-plasmic-override={overrides.dataFetcher}
+            dataOp={{
+              sourceId: "epaE6Vn31TdBpkgyv46XuG",
+              opId: "ac247c02-e1ba-4123-9510-4e4080b4ecc2",
+              userArgs: {},
+              cacheKey: `plasmic.$.d33-mELxUtin.$.ac247c02-e1ba-4123-9510-4e4080b4ecc2.$.`,
+              invalidatedKeys: null,
+              roleId: null
+            }}
+            queries={{}}
+          />
         </div>
       </div>
     </React.Fragment>
@@ -200,10 +216,11 @@ function PlasmicHomepage__RenderFunc(props: {
 }
 
 const PlasmicDescendants = {
-  root: ["root", "section", "h1", "text"],
+  root: ["root", "section", "h1", "text", "dataFetcher"],
   section: ["section", "h1", "text"],
   h1: ["h1"],
-  text: ["text"]
+  text: ["text"],
+  dataFetcher: ["dataFetcher"]
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -213,6 +230,7 @@ type NodeDefaultElementType = {
   section: "section";
   h1: "h1";
   text: "div";
+  dataFetcher: typeof Fetcher;
 };
 
 type ReservedPropsType = "variants" | "args" | "overrides";
@@ -278,6 +296,7 @@ export const PlasmicHomepage = Object.assign(
     section: makeNodeComponent("section"),
     h1: makeNodeComponent("h1"),
     text: makeNodeComponent("text"),
+    dataFetcher: makeNodeComponent("dataFetcher"),
 
     // Metadata about props expected for PlasmicHomepage
     internalVariantProps: PlasmicHomepage__VariantProps,
