@@ -10,10 +10,10 @@ export function MuiButton({ children, ...props }: MuiButtonProps) {
   return <Button {...props}>{children}</Button>;
 }
 
-// Directly register inside MuiButton.tsx
+// ✅ Register the MuiButton (Plasmic will recognize it)
 registerComponent(MuiButton, {
   name: "MuiButton",
-  importPath: "@components/MuiButton",
+  importPath: "@/components/MuiButton",
   props: {
     variant: {
       type: "choice",

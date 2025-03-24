@@ -65,7 +65,7 @@ import {
   usePlasmicInvalidate
 } from "@plasmicapp/react-web/lib/data-sources";
 
-import { MuiButton } from "../../../../components/MuiButton"; // plasmic-import: tXHBWrPnykvD/codeComponent
+import { MuiButton } from "@/components/MuiButton";
 import { Fetcher } from "@plasmicapp/react-web/lib/data-sources";
 
 import "@plasmicapp/react-web/lib/plasmic.css";
