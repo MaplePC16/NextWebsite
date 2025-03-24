@@ -65,6 +65,7 @@ import {
   usePlasmicInvalidate
 } from "@plasmicapp/react-web/lib/data-sources";
 
+import { MuiButton } from "../../../../components/MuiButton"; // plasmic-import: tXHBWrPnykvD/codeComponent
 import { Fetcher } from "@plasmicapp/react-web/lib/data-sources";
 
 import "@plasmicapp/react-web/lib/plasmic.css";
@@ -89,6 +90,7 @@ export type PlasmicHomepage__OverridesType = {
   section?: Flex__<"section">;
   h1?: Flex__<"h1">;
   text?: Flex__<"div">;
+  muiButton?: Flex__<typeof MuiButton>;
 };
 
 export interface DefaultHomepageProps {}
@@ -224,6 +226,16 @@ function PlasmicHomepage__RenderFunc(props: {
                 </React.Fragment>
               </React.Fragment>
             </div>
+            <MuiButton
+              data-plasmic-name={"muiButton"}
+              data-plasmic-override={overrides.muiButton}
+              className={classNames("__wab_instance", sty.muiButton)}
+              color={"primary"}
+              size={"medium"}
+              variant={"outlined"}
+            >
+              {"MUI button"}
+            </MuiButton>
           </section>
         </div>
       </div>
@@ -232,10 +244,11 @@ function PlasmicHomepage__RenderFunc(props: {
 }
 
 const PlasmicDescendants = {
-  root: ["root", "section", "h1", "text"],
-  section: ["section", "h1", "text"],
+  root: ["root", "section", "h1", "text", "muiButton"],
+  section: ["section", "h1", "text", "muiButton"],
   h1: ["h1"],
-  text: ["text"]
+  text: ["text"],
+  muiButton: ["muiButton"]
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -245,6 +258,7 @@ type NodeDefaultElementType = {
   section: "section";
   h1: "h1";
   text: "div";
+  muiButton: typeof MuiButton;
 };
 
 type ReservedPropsType = "variants" | "args" | "overrides";
@@ -310,6 +324,7 @@ export const PlasmicHomepage = Object.assign(
     section: makeNodeComponent("section"),
     h1: makeNodeComponent("h1"),
     text: makeNodeComponent("text"),
+    muiButton: makeNodeComponent("muiButton"),
 
     // Metadata about props expected for PlasmicHomepage
     internalVariantProps: PlasmicHomepage__VariantProps,
