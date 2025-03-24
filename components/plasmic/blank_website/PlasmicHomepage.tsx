@@ -231,6 +231,36 @@ function PlasmicHomepage__RenderFunc(props: {
               data-plasmic-override={overrides.muiButton}
               className={classNames("__wab_instance", sty.muiButton)}
               color={"primary"}
+              onClick={async () => {
+                const $steps = {};
+
+                $steps["updateStateVariable"] = true
+                  ? (() => {
+                      const actionArgs = {};
+                      return (({
+                        variable,
+                        value,
+                        startIndex,
+                        deleteCount
+                      }) => {
+                        if (!variable) {
+                          return;
+                        }
+                        const { objRoot, variablePath } = variable;
+                        undefined;
+                      })?.apply(null, [actionArgs]);
+                    })()
+                  : undefined;
+                if (
+                  $steps["updateStateVariable"] != null &&
+                  typeof $steps["updateStateVariable"] === "object" &&
+                  typeof $steps["updateStateVariable"].then === "function"
+                ) {
+                  $steps["updateStateVariable"] = await $steps[
+                    "updateStateVariable"
+                  ];
+                }
+              }}
               size={"medium"}
               variant={"outlined"}
             >
