@@ -59,10 +59,18 @@ import {
   useGlobalActions
 } from "@plasmicapp/react-web/lib/host";
 
+import {
+  executePlasmicDataOp,
+  usePlasmicDataOp,
+  usePlasmicInvalidate
+} from "@plasmicapp/react-web/lib/data-sources";
+
+import { AntdTable } from "@plasmicpkgs/antd5/skinny/registerTable";
 import { Fetcher } from "@plasmicapp/react-web/lib/data-sources";
 
 import "@plasmicapp/react-web/lib/plasmic.css";
 
+import plasmic_antd_5_hostless_css from "../antd_5_hostless/plasmic.module.css"; // plasmic-import: ohDidvG9XsCeFumugENU3J/projectcss
 import projectcss from "./plasmic.module.css"; // plasmic-import: dBMHumUb6gtoSbF9zUMX5E/projectcss
 import sty from "./PlasmicHomepage.module.css"; // plasmic-import: cSmLf4Gl2K8v/css
 
@@ -73,16 +81,16 @@ export type PlasmicHomepage__VariantsArgs = {};
 type VariantPropType = keyof PlasmicHomepage__VariantsArgs;
 export const PlasmicHomepage__VariantProps = new Array<VariantPropType>();
 
-export type PlasmicHomepage__ArgsType = {};
+export type PlasmicHomepage__ArgsType = { rowKey?: "Dynamic options" };
 type ArgPropType = keyof PlasmicHomepage__ArgsType;
-export const PlasmicHomepage__ArgProps = new Array<ArgPropType>();
+export const PlasmicHomepage__ArgProps = new Array<ArgPropType>("rowKey");
 
 export type PlasmicHomepage__OverridesType = {
   root?: Flex__<"div">;
   section?: Flex__<"section">;
   h1?: Flex__<"h1">;
   text?: Flex__<"div">;
-  dataFetcher?: Flex__<typeof Fetcher>;
+  table?: Flex__<typeof AntdTable>;
 };
 
 export interface DefaultHomepageProps {}
@@ -125,6 +133,47 @@ function PlasmicHomepage__RenderFunc(props: {
   const refsRef = React.useRef({});
   const $refs = refsRef.current;
 
+  let [$queries, setDollarQueries] = React.useState<
+    Record<string, ReturnType<typeof usePlasmicDataOp>>
+  >({});
+  const stateSpecs: Parameters<typeof useDollarState>[0] = React.useMemo(
+    () => [
+      {
+        path: "table.selectedRowKeys",
+        type: "private",
+        variableType: "array",
+        initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
+
+        refName: "table"
+      }
+    ],
+    [$props, $ctx, $refs]
+  );
+  const $state = useDollarState(stateSpecs, {
+    $props,
+    $ctx,
+    $queries: $queries,
+    $refs
+  });
+
+  const new$Queries: Record<string, ReturnType<typeof usePlasmicDataOp>> = {
+    query: usePlasmicDataOp(() => {
+      return {
+        sourceId: "epaE6Vn31TdBpkgyv46XuG",
+        opId: "5fdde0d9-a225-4d42-8c0d-cc8c8ba51688",
+        userArgs: {},
+        cacheKey: `plasmic.$.5fdde0d9-a225-4d42-8c0d-cc8c8ba51688.$.`,
+        invalidatedKeys: null,
+        roleId: null
+      };
+    })
+  };
+  if (Object.keys(new$Queries).some(k => new$Queries[k] !== $queries[k])) {
+    setDollarQueries(new$Queries);
+
+    $queries = new$Queries;
+  }
+
   return (
     <React.Fragment>
       <Head></Head>
@@ -147,6 +196,7 @@ function PlasmicHomepage__RenderFunc(props: {
             projectcss.plasmic_default_styles,
             projectcss.plasmic_mixins,
             projectcss.plasmic_tokens,
+            plasmic_antd_5_hostless_css.plasmic_tokens,
             sty.root
           )}
         >
@@ -165,7 +215,7 @@ function PlasmicHomepage__RenderFunc(props: {
                 sty.h1
               )}
             >
-              {"Hello World! asdasda"}
+              {"Hello World!"}
             </h1>
             <div
               data-plasmic-name={"text"}
@@ -195,20 +245,53 @@ function PlasmicHomepage__RenderFunc(props: {
                 </React.Fragment>
               </React.Fragment>
             </div>
+            <AntdTable
+              data-plasmic-name={"table"}
+              data-plasmic-override={overrides.table}
+              bordered={false}
+              className={classNames("__wab_instance", sty.table)}
+              data={(() => {
+                try {
+                  return $queries.query.data.response ?? [];
+                } catch (e) {
+                  if (
+                    e instanceof TypeError ||
+                    e?.plasmicType === "PlasmicUndefinedDataError"
+                  ) {
+                    return (() => {
+                      try {
+                        return $queries.query;
+                      } catch (e) {
+                        if (
+                          e instanceof TypeError ||
+                          e?.plasmicType === "PlasmicUndefinedDataError"
+                        ) {
+                          return undefined;
+                        }
+                        throw e;
+                      }
+                    })();
+                  }
+                  throw e;
+                }
+              })()}
+              isSelectable={"single"}
+              onSelectedRowKeysChange={async (...eventArgs: any) => {
+                generateStateOnChangeProp($state, [
+                  "table",
+                  "selectedRowKeys"
+                ]).apply(null, eventArgs);
+              }}
+              ref={ref => {
+                $refs["table"] = ref;
+              }}
+              rowKey={undefined}
+              selectedRowKeys={generateStateValueProp($state, [
+                "table",
+                "selectedRowKeys"
+              ])}
+            />
           </section>
-          <Fetcher
-            data-plasmic-name={"dataFetcher"}
-            data-plasmic-override={overrides.dataFetcher}
-            dataOp={{
-              sourceId: "epaE6Vn31TdBpkgyv46XuG",
-              opId: "ac247c02-e1ba-4123-9510-4e4080b4ecc2",
-              userArgs: {},
-              cacheKey: `plasmic.$.d33-mELxUtin.$.ac247c02-e1ba-4123-9510-4e4080b4ecc2.$.`,
-              invalidatedKeys: null,
-              roleId: null
-            }}
-            queries={{}}
-          />
         </div>
       </div>
     </React.Fragment>
@@ -216,11 +299,11 @@ function PlasmicHomepage__RenderFunc(props: {
 }
 
 const PlasmicDescendants = {
-  root: ["root", "section", "h1", "text", "dataFetcher"],
-  section: ["section", "h1", "text"],
+  root: ["root", "section", "h1", "text", "table"],
+  section: ["section", "h1", "text", "table"],
   h1: ["h1"],
   text: ["text"],
-  dataFetcher: ["dataFetcher"]
+  table: ["table"]
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -230,7 +313,7 @@ type NodeDefaultElementType = {
   section: "section";
   h1: "h1";
   text: "div";
-  dataFetcher: typeof Fetcher;
+  table: typeof AntdTable;
 };
 
 type ReservedPropsType = "variants" | "args" | "overrides";
@@ -296,7 +379,7 @@ export const PlasmicHomepage = Object.assign(
     section: makeNodeComponent("section"),
     h1: makeNodeComponent("h1"),
     text: makeNodeComponent("text"),
-    dataFetcher: makeNodeComponent("dataFetcher"),
+    table: makeNodeComponent("table"),
 
     // Metadata about props expected for PlasmicHomepage
     internalVariantProps: PlasmicHomepage__VariantProps,
