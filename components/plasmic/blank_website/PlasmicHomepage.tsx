@@ -65,7 +65,6 @@ import {
   usePlasmicInvalidate
 } from "@plasmicapp/react-web/lib/data-sources";
 
-import { AntdTable } from "@plasmicpkgs/antd5/skinny/registerTable";
 import { Fetcher } from "@plasmicapp/react-web/lib/data-sources";
 
 import "@plasmicapp/react-web/lib/plasmic.css";
@@ -90,7 +89,6 @@ export type PlasmicHomepage__OverridesType = {
   section?: Flex__<"section">;
   h1?: Flex__<"h1">;
   text?: Flex__<"div">;
-  table?: Flex__<typeof AntdTable>;
 };
 
 export interface DefaultHomepageProps {}
@@ -136,25 +134,6 @@ function PlasmicHomepage__RenderFunc(props: {
   let [$queries, setDollarQueries] = React.useState<
     Record<string, ReturnType<typeof usePlasmicDataOp>>
   >({});
-  const stateSpecs: Parameters<typeof useDollarState>[0] = React.useMemo(
-    () => [
-      {
-        path: "table.selectedRowKeys",
-        type: "private",
-        variableType: "array",
-        initFunc: ({ $props, $state, $queries, $ctx }) => undefined,
-
-        refName: "table"
-      }
-    ],
-    [$props, $ctx, $refs]
-  );
-  const $state = useDollarState(stateSpecs, {
-    $props,
-    $ctx,
-    $queries: $queries,
-    $refs
-  });
 
   const new$Queries: Record<string, ReturnType<typeof usePlasmicDataOp>> = {
     query: usePlasmicDataOp(() => {
@@ -245,52 +224,6 @@ function PlasmicHomepage__RenderFunc(props: {
                 </React.Fragment>
               </React.Fragment>
             </div>
-            <AntdTable
-              data-plasmic-name={"table"}
-              data-plasmic-override={overrides.table}
-              bordered={false}
-              className={classNames("__wab_instance", sty.table)}
-              data={(() => {
-                try {
-                  return $queries.query.data.response ?? [];
-                } catch (e) {
-                  if (
-                    e instanceof TypeError ||
-                    e?.plasmicType === "PlasmicUndefinedDataError"
-                  ) {
-                    return (() => {
-                      try {
-                        return $queries.query;
-                      } catch (e) {
-                        if (
-                          e instanceof TypeError ||
-                          e?.plasmicType === "PlasmicUndefinedDataError"
-                        ) {
-                          return undefined;
-                        }
-                        throw e;
-                      }
-                    })();
-                  }
-                  throw e;
-                }
-              })()}
-              isSelectable={"single"}
-              onSelectedRowKeysChange={async (...eventArgs: any) => {
-                generateStateOnChangeProp($state, [
-                  "table",
-                  "selectedRowKeys"
-                ]).apply(null, eventArgs);
-              }}
-              ref={ref => {
-                $refs["table"] = ref;
-              }}
-              rowKey={undefined}
-              selectedRowKeys={generateStateValueProp($state, [
-                "table",
-                "selectedRowKeys"
-              ])}
-            />
           </section>
         </div>
       </div>
@@ -299,11 +232,10 @@ function PlasmicHomepage__RenderFunc(props: {
 }
 
 const PlasmicDescendants = {
-  root: ["root", "section", "h1", "text", "table"],
-  section: ["section", "h1", "text", "table"],
+  root: ["root", "section", "h1", "text"],
+  section: ["section", "h1", "text"],
   h1: ["h1"],
-  text: ["text"],
-  table: ["table"]
+  text: ["text"]
 } as const;
 type NodeNameType = keyof typeof PlasmicDescendants;
 type DescendantsType<T extends NodeNameType> =
@@ -313,7 +245,6 @@ type NodeDefaultElementType = {
   section: "section";
   h1: "h1";
   text: "div";
-  table: typeof AntdTable;
 };
 
 type ReservedPropsType = "variants" | "args" | "overrides";
@@ -379,7 +310,6 @@ export const PlasmicHomepage = Object.assign(
     section: makeNodeComponent("section"),
     h1: makeNodeComponent("h1"),
     text: makeNodeComponent("text"),
-    table: makeNodeComponent("table"),
 
     // Metadata about props expected for PlasmicHomepage
     internalVariantProps: PlasmicHomepage__VariantProps,
